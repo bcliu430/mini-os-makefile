@@ -13,3 +13,6 @@ mini-os.gz: $(SRC)
 
 run: mini-os.gz
 	xl create $(XEN_CONFIG) -c
+	
+clean:
+	rm -rf mini-os.gz
