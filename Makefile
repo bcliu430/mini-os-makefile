@@ -1,13 +1,15 @@
-XEN_SRC_DIR=/root/src/xen
+XEN_SRC_DIR=/root/xen
 SRC=main.c
 ARCH=x86_64
 XEN_CONFIG=domain_config.xl
+CFG=minios.cfg
 
 all: $(XEN_SRC_DIR)/xen/xen mini-os.gz
 
 mini-os.gz: $(SRC) $(XEN_SRC_DIR)/xen/xen $(XEN_SRC_DIR)/stubdom/config.log2
 	make -C $(XEN_SRC_DIR)/stubdom/c clean
 	cp -rf $(SRC) $(XEN_SRC_DIR)/stubdom/c/
+	cp -rf $(CFG) $(XEN_SRC_DIR)/stubdom/c/minios.cfg
 	make -C $(XEN_SRC_DIR)/stubdom c-stubdom -j$(shell cat /proc/cpuinfo | grep processor | wc -l)
 	cp -f $(XEN_SRC_DIR)/stubdom/mini-os-x86_64-c/mini-os.gz .
 
@@ -17,7 +19,7 @@ run: mini-os.gz
 
 # Xen configure
 $(XEN_SRC_DIR)/config.log:
-	cd $(XEN_SRC_DIR)/; ./configure
+	cd $(XEN_SRC_DIR)/ && ./configure
 
 # Xen
 $(XEN_SRC_DIR)/xen/xen: $(XEN_SRC_DIR)/config.log
@@ -25,7 +27,7 @@ $(XEN_SRC_DIR)/xen/xen: $(XEN_SRC_DIR)/config.log
 	
 # Stubdoms configure
 $(XEN_SRC_DIR)/stubdom/config.log2:
-	cd $(XEN_SRC_DIR)/stubdom/; ./configure --enable-c-stubdom; touch config.log2
+	cd $(XEN_SRC_DIR)/stubdom/ && ./configure --enable-c-stubdom && touch config.log2
 	
 .PHONY: clean
 clean:
