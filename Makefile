@@ -1,5 +1,6 @@
 XEN_SRC_DIR=/root/xen
-SRC=main.c
+XEN_SRC_DIR=${HOME}/xen-install/xen
+SRC=main.c addition.o addition.h
 ARCH=x86_64
 XEN_CONFIG=domain_config.xl
 CFG=minios.cfg
